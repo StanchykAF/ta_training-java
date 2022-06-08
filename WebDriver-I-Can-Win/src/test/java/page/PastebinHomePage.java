@@ -17,7 +17,7 @@ public class PastebinHomePage {
     @FindBy (id = "postform-text")
     private WebElement pasteForm;
 
-    @FindBy (xpath = "//select[@id=\"postform-expiration\"]/option[@value='10M']")
+    @FindBy (xpath = "//*[@id=\"w0\"]/div[5]/div[1]/div[2]/div/span")
     private WebElement pasteExpiration;
 
     @FindBy (id = "postform-name")
@@ -40,7 +40,12 @@ public class PastebinHomePage {
 
     public void createNewPaste (String pasteText, String pasteTitle) {
         pasteForm.sendKeys(pasteText);
-        pasteExpiration.submit();
+
+        pasteExpiration.click();
+        new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@id=\"select2-postform-expiration-results\"]/li[3]")))
+                .click();
+
         pasteName.sendKeys(pasteTitle);
         createNewPasteButton.click();
     }

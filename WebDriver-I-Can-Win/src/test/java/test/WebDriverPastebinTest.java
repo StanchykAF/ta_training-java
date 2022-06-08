@@ -1,6 +1,7 @@
 package test;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.safari.SafariDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -13,7 +14,8 @@ public class WebDriverPastebinTest {
 
     @BeforeMethod(alwaysRun = true)
     public void browserSetup () {
-        driver = new SafariDriver();
+//        driver = new SafariDriver();
+        driver = new ChromeDriver();
         driver.manage().window().maximize();
     }
 
