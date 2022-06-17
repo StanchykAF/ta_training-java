@@ -4,9 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.safari.SafariDriver;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import page.PastebinHomePage;
 import page.PastebinPasteResultPage;
 
@@ -18,14 +16,14 @@ public class WebDriverPastebinTest {
     private String pasteText;
     private String pasteTitle;
 
-    @BeforeMethod (alwaysRun = true)
+    @BeforeTest (alwaysRun = true)
     private void browserSetup () {
 //        driver = new SafariDriver();
         driver = new ChromeDriver();
         driver.manage().window().maximize();
     }
 
-    @BeforeMethod (firstTimeOnly = true)
+    @BeforeTest (alwaysRun = true)
     private void createNewPaste () {
         pasteText = "git config --global user.name  \"New Sheriff in Town\"\n" +
                 "git reset $(git commit-tree HEAD^{tree} -m \"Legacy code\")\n" +
@@ -63,7 +61,7 @@ public class WebDriverPastebinTest {
         );
     }
 
-    @AfterMethod (alwaysRun = true)
+    @AfterTest (alwaysRun = true)
     private void browserTearDown () {
         driver.quit();
         driver = null;
