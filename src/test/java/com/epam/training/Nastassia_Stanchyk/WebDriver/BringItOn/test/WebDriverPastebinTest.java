@@ -1,13 +1,13 @@
-package test;
+package com.epam.training.Nastassia_Stanchyk.WebDriver.BringItOn.test;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.safari.SafariDriver;
 import org.testng.Assert;
-import org.testng.annotations.*;
-import page.PastebinHomePage;
-import page.PastebinPasteResultPage;
-
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+import com.epam.training.Nastassia_Stanchyk.WebDriver.BringItOn.page.PastebinHomePage;
+import com.epam.training.Nastassia_Stanchyk.WebDriver.BringItOn.page.PastebinPasteResultPage;
 
 public class WebDriverPastebinTest {
 
