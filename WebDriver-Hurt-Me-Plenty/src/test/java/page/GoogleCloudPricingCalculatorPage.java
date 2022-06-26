@@ -34,7 +34,7 @@ public class GoogleCloudPricingCalculatorPage {
         PageFactory.initElements(driver, this);
     }
 
-    public GoogleCloudPricingCalculatorPage calculatePrice () {
+    public List<WebElement> calculatePrice () {
 
         driver.switchTo().frame(new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#cloud-site > devsite-iframe > iframe"))));
@@ -66,7 +66,8 @@ public class GoogleCloudPricingCalculatorPage {
         dropdownsProcessing("#select_118", "#select_container_119 md-option[value='europe-west3']");
         dropdownsProcessing("#select_125", "#select_container_126 md-option[value='1']");
         addToEstimateButton.click();
-        return this;
+        return new WebDriverWait(driver, Duration.ofSeconds(10))
+                .until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("div.md-list-item-text")));
     }
 
     private void dropdownsProcessing (String dropdownSelector, String dropdownOptionSelector) {
@@ -75,17 +76,4 @@ public class GoogleCloudPricingCalculatorPage {
                 .until(ExpectedConditions.elementToBeClickable(By.cssSelector(dropdownOptionSelector)))
                 .click();
     }
-
-    public String getVMClass () {
-        List<WebElement> res = new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("div.md-list-item-text")));
-        for (WebElement elem : res) {
-            System.out.println(elem.getText().startsWith("Provisioning model"));
-        }
-
-
-
-        return "string";
-    }
-
 }
