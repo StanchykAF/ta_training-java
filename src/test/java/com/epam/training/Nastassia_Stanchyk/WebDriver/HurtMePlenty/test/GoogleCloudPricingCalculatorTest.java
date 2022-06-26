@@ -1,4 +1,4 @@
-package test;
+package com.epam.training.Nastassia_Stanchyk.WebDriver.HurtMePlenty.test;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -8,7 +8,7 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 
 import org.testng.annotations.Test;
-import page.*;
+import com.epam.training.Nastassia_Stanchyk.WebDriver.HurtMePlenty.page.*;
 
 import java.util.List;
 
