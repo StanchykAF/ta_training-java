@@ -1,12 +1,11 @@
-package test;
+package com.epam.training.Nastassia_Stanchyk.WebDriver.ICanWin.test;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import page.PastebinHomePage;
-
+import com.epam.training.Nastassia_Stanchyk.WebDriver.ICanWin.page.PastebinHomePage;
 
 public class WebDriverPastebinTest {
 
@@ -14,7 +13,6 @@ public class WebDriverPastebinTest {
 
     @BeforeMethod(alwaysRun = true)
     public void browserSetup () {
-//        driver = new SafariDriver();
         driver = new ChromeDriver();
         driver.manage().window().maximize();
     }

@@ -1,4 +1,4 @@
-package page;
+package com.epam.training.Nastassia_Stanchyk.WebDriver.ICanWin.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
