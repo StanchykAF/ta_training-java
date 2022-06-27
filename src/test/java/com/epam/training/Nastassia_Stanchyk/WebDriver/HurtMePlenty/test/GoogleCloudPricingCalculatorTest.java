@@ -30,7 +30,8 @@ public class GoogleCloudPricingCalculatorTest {
                 .openPage()
                 .searchForTerms(searchTerm)
                 .openGoogleCloudPricingCalculatorPage()
-                .calculatePrice();
+                .calculatePrice()
+                .getCalculatedForm();
     }
 
     @Test

@@ -34,7 +34,7 @@ public class GoogleCloudPricingCalculatorPage {
         PageFactory.initElements(driver, this);
     }
 
-    public List<WebElement> calculatePrice () {
+    public GoogleCloudPricingCalculatorPage calculatePrice () {
 
         driver.switchTo().frame(new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#cloud-site > devsite-iframe > iframe"))));
@@ -66,6 +66,10 @@ public class GoogleCloudPricingCalculatorPage {
         dropdownsProcessing("#select_118", "#select_container_119 md-option[value='europe-west3']");
         dropdownsProcessing("#select_125", "#select_container_126 md-option[value='1']");
         addToEstimateButton.click();
+        return this;
+    }
+
+    public List<WebElement> getCalculatedForm () {
         return new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("div.md-list-item-text")));
     }
