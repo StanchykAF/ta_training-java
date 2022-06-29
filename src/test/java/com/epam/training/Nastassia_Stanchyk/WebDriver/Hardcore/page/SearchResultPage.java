@@ -1,4 +1,4 @@
-package com.epam.training.Nastassia_Stanchyk.WebDriver.HurtMePlenty.page;
+package com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -14,7 +14,7 @@ public class SearchResultPage {
     private WebDriver driver;
     private String searchTerm;
 
-    public SearchResultPage (WebDriver driver, String searchTerm) {
+    public SearchResultPage(WebDriver driver, String searchTerm) {
         this.driver = driver;
         this.searchTerm = searchTerm;
     }
