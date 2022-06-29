@@ -1,4 +1,4 @@
-package com.epam.training.Nastassia_Stanchyk.WebDriver.HurtMePlenty.page;
+package com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.page;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -14,7 +14,7 @@ public class GoogleCloudHomePage {
     private WebDriver driver;
     private WebElement searchInput;
 
-    public GoogleCloudHomePage (WebDriver driver) {
+    public GoogleCloudHomePage(WebDriver driver) {
         this.driver = driver;
     }
 
