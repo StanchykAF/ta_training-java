@@ -1,19 +1,18 @@
 package com.epam.training.Nastassia_Stanchyk.WebDriver.BringItOn.page;
 
+import com.epam.training.Nastassia_Stanchyk.WebDriver.ICanWin.page.AbstractPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class PastebinHomePage {
+public class PastebinHomePage extends AbstractPage {
 
     private static final String HOMEPAGE_URL = "http://pastebin.com";
-    private WebDriver driver;
 
     @FindBy(id = "postform-text")
     private WebElement pasteForm;
@@ -31,8 +30,7 @@ public class PastebinHomePage {
     private WebElement syntaxHighlight;
 
     public PastebinHomePage (WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
+        super(driver);
     }
 
     public PastebinHomePage openPage () {
@@ -42,6 +40,7 @@ public class PastebinHomePage {
         return this;
     }
 
+    @Override
     public PastebinPasteResultPage createNewPaste (String pasteText, String pasteTitle) {
         pasteForm.sendKeys(pasteText);
 
@@ -57,6 +56,6 @@ public class PastebinHomePage {
 
         pasteName.sendKeys(pasteTitle);
         createNewPasteButton.click();
-        return new PastebinPasteResultPage(driver, pasteText, pasteTitle);
+        return new PastebinPasteResultPage(driver);
     }
 }

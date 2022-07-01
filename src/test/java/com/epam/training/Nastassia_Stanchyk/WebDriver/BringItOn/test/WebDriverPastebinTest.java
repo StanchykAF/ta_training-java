@@ -18,7 +18,6 @@ public class WebDriverPastebinTest {
 
     @BeforeTest (alwaysRun = true)
     private void browserSetup () {
-//        driver = new SafariDriver();
         driver = new ChromeDriver();
         driver.manage().window().maximize();
     }
@@ -29,9 +28,11 @@ public class WebDriverPastebinTest {
                 "git reset $(git commit-tree HEAD^{tree} -m \"Legacy code\")\n" +
                 "git push origin master --force";
         pasteTitle = "how to gain dominance among developers";
-        actualPasteResults = new PastebinHomePage(driver)
+        actualPasteResults = (PastebinPasteResultPage) new PastebinHomePage(driver)
                 .openPage()
-                .createNewPaste(pasteText, pasteTitle);
+                .acceptCookies()
+                .createNewPaste(pasteText, pasteTitle)
+                .acceptCookies();
     }
 
     @Test
