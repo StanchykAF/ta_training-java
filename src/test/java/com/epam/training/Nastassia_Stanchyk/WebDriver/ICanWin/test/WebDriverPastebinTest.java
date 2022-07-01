@@ -21,11 +21,14 @@ public class WebDriverPastebinTest {
     public void createNewPasteTest () {
         new PastebinHomePage(driver)
                 .openPage()
-                .createNewPaste("Hello from WebDriver","helloweb");
+                .acceptCookies()
+                .createNewPaste("Hello from WebDriver","helloweb")
+                .acceptCookies();
     }
 
     @AfterMethod(alwaysRun = true)
-    public void browserTearDown () {
+    public void browserTearDown () throws InterruptedException {
+        Thread.sleep(5000);
         driver.quit();
         driver = null;
     }
