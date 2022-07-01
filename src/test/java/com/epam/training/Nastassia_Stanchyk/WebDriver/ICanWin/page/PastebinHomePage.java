@@ -10,9 +10,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class PastebinHomePage {
+public class PastebinHomePage extends AbstractPage {
     private static final String HOMEPAGE_URL = "http://pastebin.com";
-    private WebDriver driver;
 
     @FindBy (id = "postform-text")
     private WebElement pasteForm;
@@ -27,8 +26,7 @@ public class PastebinHomePage {
     private WebElement createNewPasteButton;
 
     public PastebinHomePage (WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
+        super(driver);
     }
 
     public PastebinHomePage openPage () {
@@ -38,7 +36,8 @@ public class PastebinHomePage {
         return this;
     }
 
-    public void createNewPaste (String pasteText, String pasteTitle) {
+    @Override
+    public PastebinHomePage createNewPaste (String pasteText, String pasteTitle) {
         pasteForm.sendKeys(pasteText);
 
         pasteExpiration.click();
@@ -48,5 +47,6 @@ public class PastebinHomePage {
 
         pasteName.sendKeys(pasteTitle);
         createNewPasteButton.click();
+        return this;
     }
 }
