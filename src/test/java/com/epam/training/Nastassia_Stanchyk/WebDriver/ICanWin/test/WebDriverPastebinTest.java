@@ -1,5 +1,6 @@
 package com.epam.training.Nastassia_Stanchyk.WebDriver.ICanWin.test;
 
+import com.epam.training.Nastassia_Stanchyk.WebDriver.ICanWin.model.PasteFormOptions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.AfterMethod;
@@ -10,9 +11,7 @@ import com.epam.training.Nastassia_Stanchyk.WebDriver.ICanWin.page.PastebinHomeP
 public class WebDriverPastebinTest {
 
     private WebDriver driver;
-    private final String PASTE_TEXT = "Hello from WebDriver";
-    private final String PASTE_TITLE = "helloweb";
-    private final String PASTE_EXPIRATION_TIME = "10 Minutes";
+    private PasteFormOptions pasteFormOptions = new PasteFormOptions();
 
     @BeforeMethod()
     public void browserSetup () {
@@ -24,7 +23,7 @@ public class WebDriverPastebinTest {
     public void createNewPasteTest () {
         new PastebinHomePage(driver)
                 .openPage()
-                .createNewPaste(PASTE_TEXT,PASTE_TITLE, PASTE_EXPIRATION_TIME);
+                .createNewPaste(pasteFormOptions);
     }
 
     @AfterMethod()

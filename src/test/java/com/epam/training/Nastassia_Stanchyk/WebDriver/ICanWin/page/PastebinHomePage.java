@@ -1,5 +1,6 @@
 package com.epam.training.Nastassia_Stanchyk.WebDriver.ICanWin.page;
 
+import com.epam.training.Nastassia_Stanchyk.WebDriver.ICanWin.model.PasteFormOptions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -38,10 +39,10 @@ public class PastebinHomePage extends AbstractPage {
         return this;
     }
 
-    public PastebinHomePage createNewPaste (String pasteText, String pasteTitle, String expirationTime) {
-        pasteFormText.sendKeys(pasteText);
-        setPasteExpirationTime(expirationTime);
-        pasteName.sendKeys(pasteTitle);
+    public PastebinHomePage createNewPaste (PasteFormOptions pasteFormOptions) {
+        pasteFormText.sendKeys(pasteFormOptions.getPASTE_TEXT());
+        setPasteExpirationTime(pasteFormOptions.getPASTE_EXPIRATION_TIME());
+        pasteName.sendKeys(pasteFormOptions.getPASTE_TITLE());
         createNewPasteButton.click();
         closeCookiesWindow();
         return this;
