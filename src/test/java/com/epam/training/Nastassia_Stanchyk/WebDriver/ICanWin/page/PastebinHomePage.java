@@ -4,20 +4,21 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
 
 public class PastebinHomePage extends AbstractPage {
     private static final String HOMEPAGE_URL = "http://pastebin.com";
+    private WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS));
 
     @FindBy (id = "postform-text")
-    private WebElement pasteForm;
+    private WebElement pasteFormText;
 
-    @FindBy (xpath = "//*[@id=\"w0\"]/div[5]/div[1]/div[2]/div/span")
-    private WebElement pasteExpiration;
+    @FindBy (css = "#postform-expiration + span")
+    private WebElement pasteExpirationTime;
 
     @FindBy (id = "postform-name")
     private WebElement pasteName;
@@ -25,28 +26,37 @@ public class PastebinHomePage extends AbstractPage {
     @FindBy (xpath = "//button[@class='btn -big']")
     private WebElement createNewPasteButton;
 
+    private final By pasteExpirationTimeDropdownList = By.cssSelector("#select2-postform-expiration-results > li");
+
     public PastebinHomePage (WebDriver driver) {
         super(driver);
     }
 
     public PastebinHomePage openPage () {
         driver.get(HOMEPAGE_URL);
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.presenceOfElementLocated(By.id("postform-text")));
+        closeCookiesWindow();
         return this;
     }
 
-    @Override
-    public PastebinHomePage createNewPaste (String pasteText, String pasteTitle) {
-        pasteForm.sendKeys(pasteText);
-
-        pasteExpiration.click();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@id=\"select2-postform-expiration-results\"]/li[3]")))
-                .click();
-
+    public PastebinHomePage createNewPaste (String pasteText, String pasteTitle, String expirationTime) {
+        pasteFormText.sendKeys(pasteText);
+        setPasteExpirationTime(expirationTime);
         pasteName.sendKeys(pasteTitle);
         createNewPasteButton.click();
+        closeCookiesWindow();
         return this;
+    }
+
+    private void setPasteExpirationTime (String time) {
+        pasteExpirationTime.click();
+        List<WebElement> pasteExpirationTimeList = wait
+                .until(ExpectedConditions.presenceOfAllElementsLocatedBy(pasteExpirationTimeDropdownList));
+        for (WebElement element : pasteExpirationTimeList) {
+            if (time.equalsIgnoreCase(element.getText())) {
+                element.click();
+                return;
+            }
+        }
+        throw new RuntimeException("Chosen time is incorrect");
     }
 }

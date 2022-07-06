@@ -11,18 +11,17 @@ import java.time.Duration;
 public abstract class AbstractPage {
 
     protected WebDriver driver;
-    
+    protected final int WAIT_TIMEOUT_SECONDS = 10;
+    protected By acceptButton = By.cssSelector("button[mode='primary']");
+
     protected AbstractPage (WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
     }
 
-    public AbstractPage acceptCookies () {
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[mode='primary']")))
+    protected void closeCookiesWindow () {
+        new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS))
+                .until(ExpectedConditions.elementToBeClickable(acceptButton))
                 .click();
-        return this;
     }
-
-    public abstract AbstractPage createNewPaste(String hello_from_webDriver, String helloweb);
 }

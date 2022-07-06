@@ -10,25 +10,25 @@ import com.epam.training.Nastassia_Stanchyk.WebDriver.ICanWin.page.PastebinHomeP
 public class WebDriverPastebinTest {
 
     private WebDriver driver;
+    private final String PASTE_TEXT = "Hello from WebDriver";
+    private final String PASTE_TITLE = "helloweb";
+    private final String PASTE_EXPIRATION_TIME = "10 Minutes";
 
-    @BeforeMethod(alwaysRun = true)
+    @BeforeMethod()
     public void browserSetup () {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
     }
 
-    @Test
+    @Test (description = "Create new paste form")
     public void createNewPasteTest () {
         new PastebinHomePage(driver)
                 .openPage()
-                .acceptCookies()
-                .createNewPaste("Hello from WebDriver","helloweb")
-                .acceptCookies();
+                .createNewPaste(PASTE_TEXT,PASTE_TITLE, PASTE_EXPIRATION_TIME);
     }
 
-    @AfterMethod(alwaysRun = true)
-    public void browserTearDown () throws InterruptedException {
-        Thread.sleep(5000);
+    @AfterMethod()
+    public void browserTearDown () {
         driver.quit();
         driver = null;
     }
