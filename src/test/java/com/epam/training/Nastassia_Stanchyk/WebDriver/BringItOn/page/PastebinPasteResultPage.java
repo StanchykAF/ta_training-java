@@ -10,30 +10,28 @@ import java.time.Duration;
 
 public class PastebinPasteResultPage extends AbstractPage {
 
+    private WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS));
+
+    private final By title = By.cssSelector(".info-top h1");
+    private final By syntax = By.cssSelector("div.left > a");
+    private final By sourceCode = By.cssSelector(".highlighted-code > div.source");
+
     public PastebinPasteResultPage (WebDriver driver) {
         super(driver);
     }
 
-    public String checkTitle () {
-        return new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".info-top h1")))
+    public String getTitle() {
+        return wait.until(ExpectedConditions.presenceOfElementLocated(title))
                 .getText();
     }
 
-    public String checkSyntaxHighlight () {
-        return new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='left']/a[@class='btn -small h_800']")))
+    public String getSyntaxHighlight() {
+        return wait.until(ExpectedConditions.presenceOfElementLocated(syntax))
                 .getText();
     }
 
-    public String checkText() {
-        return new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class=\"highlighted-code\"]/div[@class=\"source\"]")))
+    public String getText() {
+        return wait.until(ExpectedConditions.presenceOfElementLocated(sourceCode))
                 .getText();
-    }
-
-    @Override
-    public AbstractPage createNewPaste (String pasteText, String pasteTitle) {
-        throw new RuntimeException("This is paste result page. You cannot create new paste from here.");
     }
 }

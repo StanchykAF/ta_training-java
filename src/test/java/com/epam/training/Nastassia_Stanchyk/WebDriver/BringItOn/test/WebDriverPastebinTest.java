@@ -1,5 +1,6 @@
 package com.epam.training.Nastassia_Stanchyk.WebDriver.BringItOn.test;
 
+import com.epam.training.Nastassia_Stanchyk.WebDriver.BringItOn.model.PasteFormOptions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
@@ -13,53 +14,44 @@ public class WebDriverPastebinTest {
 
     private WebDriver driver;
     private PastebinPasteResultPage actualPasteResults;
-    private String pasteText;
-    private String pasteTitle;
+    private PasteFormOptions pasteFormOptions;
 
-    @BeforeTest (alwaysRun = true)
+    @BeforeTest ()
     private void browserSetup () {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
     }
 
-    @BeforeTest (alwaysRun = true)
+    @BeforeTest (description = "Create new paste form")
     private void createNewPaste () {
-        pasteText = "git config --global user.name  \"New Sheriff in Town\"\n" +
+        String pasteText = "git config --global user.name  \"New Sheriff in Town\"\n" +
                 "git reset $(git commit-tree HEAD^{tree} -m \"Legacy code\")\n" +
                 "git push origin master --force";
-        pasteTitle = "how to gain dominance among developers";
-        actualPasteResults = (PastebinPasteResultPage) new PastebinHomePage(driver)
+        String pasteTitle = "how to gain dominance among developers";
+        String pasteExpirationTime = "10 Minutes";
+        String syntaxHighlight = "Bash";
+        pasteFormOptions = new PasteFormOptions(pasteText, pasteTitle, pasteExpirationTime, syntaxHighlight);
+        actualPasteResults = new PastebinHomePage(driver)
                 .openPage()
-                .acceptCookies()
-                .createNewPaste(pasteText, pasteTitle)
-                .acceptCookies();
+                .createNewPaste(pasteFormOptions);
     }
 
-    @Test
+    @Test (description = "Check Title")
     public void pasteTitleTest () {
-        Assert.assertEquals(
-                actualPasteResults.checkTitle(),
-                pasteTitle,
-                "Issue in field Title"
-        );
+        Assert.assertEquals(actualPasteResults.getTitle(), pasteFormOptions.getPasteTitle(),
+                "Text of title is incorrect");
     }
 
-    @Test
+    @Test (description = "Check Code")
     public void pasteTextTest (){
-        Assert.assertEquals(
-                actualPasteResults.checkText(),
-                pasteText,
-                "Issue in field Text"
-        );
+        Assert.assertEquals(actualPasteResults.getText(), pasteFormOptions.getPasteText(),
+                "Text of code is incorrect");
     }
 
-    @Test
+    @Test (description = "Check Syntax")
     public void pasteSyntaxHighlight () {
-        Assert.assertEquals(
-                actualPasteResults.checkSyntaxHighlight(),
-                "Bash",
-                "Issue in Syntax Highlight selection"
-        );
+        Assert.assertEquals(actualPasteResults.getSyntaxHighlight(), pasteFormOptions.getSyntaxHighlight(),
+                "Syntax Highlight is incorrect");
     }
 
     @AfterTest (alwaysRun = true)
