@@ -16,7 +16,6 @@ public abstract class AbstractPage {
 
     protected AbstractPage (WebDriver driver) {
         this.driver = driver;
-        PageFactory.initElements(driver, this);
     }
 
     protected void closeCookiesWindow () {

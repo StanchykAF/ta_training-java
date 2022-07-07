@@ -11,7 +11,6 @@ import com.epam.training.Nastassia_Stanchyk.WebDriver.ICanWin.page.PastebinHomeP
 public class WebDriverPastebinTest {
 
     private WebDriver driver;
-    private PasteFormOptions pasteFormOptions = new PasteFormOptions();
 
     @BeforeMethod()
     public void browserSetup () {
@@ -21,12 +20,15 @@ public class WebDriverPastebinTest {
 
     @Test (description = "Create new paste form")
     public void createNewPasteTest () {
+        PasteFormOptions pasteFormOptions = new PasteFormOptions("Hello from WebDriver",
+                "helloweb",
+                "10 Minutes");
         new PastebinHomePage(driver)
                 .openPage()
                 .createNewPaste(pasteFormOptions);
     }
 
-    @AfterMethod()
+    @AfterMethod(alwaysRun = true)
     public void browserTearDown () {
         driver.quit();
         driver = null;

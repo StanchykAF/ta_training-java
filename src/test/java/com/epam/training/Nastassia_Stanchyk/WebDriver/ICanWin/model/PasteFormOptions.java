@@ -4,31 +4,46 @@ import java.util.Objects;
 
 public class PasteFormOptions {
 
-    private final String PASTE_TEXT = "Hello from WebDriver";
-    private final String PASTE_TITLE = "helloweb";
-    private final String PASTE_EXPIRATION_TIME = "10 Minutes";
+    private String pasteText;
+    private String pasteTitle;
+    private String pasteExpirationTime;
 
-    public PasteFormOptions() {
+    public PasteFormOptions(String pasteText, String pasteTitle, String pasteExpirationTime) {
+        this.pasteText = pasteText;
+        this.pasteTitle = pasteTitle;
+        this.pasteExpirationTime = pasteExpirationTime;
     }
 
-    public String getPASTE_TEXT() {
-        return PASTE_TEXT;
+    public String getPasteText() {
+        return pasteText;
     }
 
-    public String getPASTE_TITLE() {
-        return PASTE_TITLE;
+    public void setPasteText(String pasteText) {
+        this.pasteText = pasteText;
     }
 
-    public String getPASTE_EXPIRATION_TIME() {
-        return PASTE_EXPIRATION_TIME;
+    public String getPasteTitle() {
+        return pasteTitle;
+    }
+
+    public void setPasteTitle(String pasteTitle) {
+        this.pasteTitle = pasteTitle;
+    }
+
+    public String getPasteExpirationTime() {
+        return pasteExpirationTime;
+    }
+
+    public void setPasteExpirationTime(String pasteExpirationTime) {
+        this.pasteExpirationTime = pasteExpirationTime;
     }
 
     @Override
     public String toString() {
         return "PasteFormOptions{" +
-                "PASTE_TEXT='" + PASTE_TEXT + '\'' +
-                ", PASTE_TITLE='" + PASTE_TITLE + '\'' +
-                ", PASTE_EXPIRATION_TIME='" + PASTE_EXPIRATION_TIME + '\'' +
+                "pasteText='" + pasteText + '\'' +
+                ", pasteTitle='" + pasteTitle + '\'' +
+                ", pasteExpirationTime='" + pasteExpirationTime + '\'' +
                 '}';
     }
 
@@ -37,13 +52,13 @@ public class PasteFormOptions {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PasteFormOptions that = (PasteFormOptions) o;
-        return PASTE_TEXT.equals(that.PASTE_TEXT) &&
-                PASTE_TITLE.equals(that.PASTE_TITLE) &&
-                PASTE_EXPIRATION_TIME.equals(that.PASTE_EXPIRATION_TIME);
+        return Objects.equals(pasteText, that.pasteText) &&
+                Objects.equals(pasteTitle, that.pasteTitle) &&
+                Objects.equals(pasteExpirationTime, that.pasteExpirationTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(PASTE_TEXT, PASTE_TITLE, PASTE_EXPIRATION_TIME);
+        return Objects.hash(pasteText, pasteTitle, pasteExpirationTime);
     }
 }
