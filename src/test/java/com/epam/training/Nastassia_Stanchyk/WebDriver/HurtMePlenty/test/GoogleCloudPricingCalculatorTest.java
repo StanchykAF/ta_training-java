@@ -16,7 +16,7 @@ import java.util.List;
 public class GoogleCloudPricingCalculatorTest {
 
     private WebDriver driver;
-    private List<WebElement> actualPricingResults;
+    private List<String> actualPricingResults;
 
     @BeforeTest ()
     private void browserSetup () {
@@ -95,9 +95,9 @@ public class GoogleCloudPricingCalculatorTest {
     }
 
     private String searchInList (String targetString) {
-        for (WebElement element : actualPricingResults) {
-            if (element.getText().startsWith(targetString)) {
-                return element.getText();
+        for (String string : actualPricingResults) {
+            if (string.startsWith(targetString)) {
+                return string;
             }
         }
         return "Not found";

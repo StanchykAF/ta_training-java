@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GoogleCloudPricingCalculatorPage extends AbstractPage {
@@ -87,8 +88,14 @@ public class GoogleCloudPricingCalculatorPage extends AbstractPage {
         return this;
     }
 
-    public List<WebElement> getCalculatedForm () {
-        return WAIT.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("div.md-list-item-text")));
+    public List<String> getCalculatedForm () {
+        List<String> calculatedFormText = new ArrayList<>();
+        List<WebElement> calculatedForm =
+                WAIT.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("div.md-list-item-text")));
+        for (WebElement element : calculatedForm) {
+            calculatedFormText.add(element.getText());
+        }
+        return calculatedFormText;
     }
 
     public GoogleCloudPricingCalculatorPage selectOperatingSystem (String operatingSystem) {
