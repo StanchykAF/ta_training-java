@@ -1,5 +1,6 @@
 package com.epam.training.Nastassia_Stanchyk.WebDriver.HurtMePlenty.test;
 
+import com.epam.training.Nastassia_Stanchyk.WebDriver.HurtMePlenty.model.FormData;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -17,24 +18,35 @@ public class GoogleCloudPricingCalculatorTest {
     private WebDriver driver;
     private List<WebElement> actualPricingResults;
 
-    @BeforeTest (alwaysRun = true)
+    @BeforeTest ()
     private void browserSetup () {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
     }
 
-    @BeforeTest (alwaysRun = true)
-    private void googleCloudPlatformPricingCalculator () {
+    @BeforeTest (description = "Getting full calculated form")
+    private void createCalculatedForm () {
         String searchTerm = "Google Cloud Platform Pricing Calculator";
+        FormData formData = new FormData();
+        formData.setNumberOfInstances("4");
+        formData.setOperationSystem("Free");
+        formData.setVMClass("Regular");
+        formData.setInstanceSeries("N1");
+        formData.setInstanceType("n1-standard-8");
+        formData.setNumberOfGPUs("1");
+        formData.setGPUType("NVIDIA Tesla V100");
+        formData.setLocalSSD("2x375 GB");
+        formData.setDatacenterLocation("Frankfurt");
+        formData.setCommittedUsage("1 Year");
         actualPricingResults = new GoogleCloudHomePage(driver)
                 .openPage()
                 .searchForTerms(searchTerm)
                 .openGoogleCloudPricingCalculatorPage()
-                .calculatePrice()
+                .calculatePrice(formData)
                 .getCalculatedForm();
     }
 
-    @Test
+    @Test (description = "Checking VM class")
     public void checkVMClassTest () {
         Assert.assertTrue(
                 searchInList("Provisioning model").contains("Regular"),
@@ -42,7 +54,7 @@ public class GoogleCloudPricingCalculatorTest {
         );
     }
 
-    @Test
+    @Test (description = "Checking instance type")
     public void checkInstanceTypeTest () {
         Assert.assertTrue(
                 searchInList("Instance type").contains("n1-standard-8"),
@@ -50,7 +62,7 @@ public class GoogleCloudPricingCalculatorTest {
         );
     }
 
-    @Test
+    @Test (description = "Checking local SSD")
     public void checkLocalSSDTest () {
         Assert.assertTrue(
                 searchInList("Local SSD").contains("2x375 GiB"),
@@ -58,7 +70,7 @@ public class GoogleCloudPricingCalculatorTest {
         );
     }
 
-    @Test
+    @Test (description = "Checking datacenter location")
     public void checkDatacenterLocationTest () {
         Assert.assertTrue(
                 searchInList("Region").contains("Frankfurt"),
@@ -66,7 +78,7 @@ public class GoogleCloudPricingCalculatorTest {
         );
     }
 
-    @Test
+    @Test (description = "Checking committed usage term")
     public void checkCommitmentTermTest () {
         Assert.assertTrue(
                 searchInList("Commitment term").contains("1 Year"),
@@ -74,7 +86,7 @@ public class GoogleCloudPricingCalculatorTest {
         );
     }
 
-    @Test
+    @Test (description = "Checking total price per month")
     public void checkTotalPricePerMonthTest () {
         Assert.assertTrue(
                 searchInList("Estimated Component Cost").contains("USD 1,081.20"),

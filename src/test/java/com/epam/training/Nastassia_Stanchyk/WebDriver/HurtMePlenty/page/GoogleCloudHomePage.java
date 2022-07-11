@@ -8,25 +8,24 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class GoogleCloudHomePage {
+public class GoogleCloudHomePage extends AbstractPage {
 
     private static final String HOMEPAGE_URL = "https://cloud.google.com/";
-    private WebDriver driver;
     private WebElement searchInput;
+    private final By searchField = By.name("q");
 
     public GoogleCloudHomePage (WebDriver driver) {
-        this.driver = driver;
+        super(driver);
     }
 
     public GoogleCloudHomePage openPage () {
         driver.get(HOMEPAGE_URL);
-        searchInput = new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.presenceOfElementLocated(By.name("q")));
+        searchInput = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS))
+                .until(ExpectedConditions.presenceOfElementLocated(searchField));
         return this;
     }
 
     public SearchResultPage searchForTerms (String term) {
-        searchInput.click();
         searchInput.sendKeys(term);
         searchInput.submit();
         return new SearchResultPage (driver, term);
