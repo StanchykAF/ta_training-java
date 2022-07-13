@@ -1,4 +1,4 @@
-package com.epam.training.Nastassia_Stanchyk.WebDriver.HurtMePlenty.model;
+package com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.model;
 
 import java.util.Objects;
 

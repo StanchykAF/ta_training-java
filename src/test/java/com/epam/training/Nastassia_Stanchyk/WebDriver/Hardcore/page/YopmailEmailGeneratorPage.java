@@ -7,24 +7,25 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class YopmailEmailGeneratorPage {
+public class YopmailEmailGeneratorPage extends AbstractPage {
 
-    private WebDriver driver;
+    private final WebDriverWait WAIT = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS));
+
+    private final By copyButton = By.id("cprnd");
+    private final By checkInboxButton = By.xpath("//button/span[text()='Проверить почту']");
 
     public YopmailEmailGeneratorPage (WebDriver driver) {
-        this.driver = driver;
+        super(driver);
     }
 
     public YopmailEmailGeneratorPage copyEmailAddress () {
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.elementToBeClickable(By.id("cprnd")))
+        WAIT.until(ExpectedConditions.elementToBeClickable(copyButton))
                 .click();
         return this;
     }
 
     public YopmailInboxPage checkInboxMail () {
-        new WebDriverWait(driver,Duration.ofSeconds(10))
-                .until(ExpectedConditions.elementToBeClickable(By.cssSelector("div.nw > button[onclick='egengo();']")))
+        WAIT.until(ExpectedConditions.elementToBeClickable(checkInboxButton))
                 .click();
         return new YopmailInboxPage(driver);
     }

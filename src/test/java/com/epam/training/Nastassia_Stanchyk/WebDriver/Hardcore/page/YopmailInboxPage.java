@@ -7,27 +7,29 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class YopmailInboxPage {
+public class YopmailInboxPage extends AbstractPage {
 
-    private WebDriver driver;
+    private final WebDriverWait WAIT = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS));
+
+    private final By refreshButton = By.id("refresh");
+    private final By mailFrame = By.id("ifmail");
+    private final By totalMonthlyPrice = By.cssSelector("td[colspan='3'] + td > h3");
 
     public YopmailInboxPage (WebDriver driver) {
-        this.driver = driver;
+        super(driver);
     }
 
     public String checkTotalMonthlyPrice () {
         try {
-            Thread.sleep(15000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.elementToBeClickable(By.id("refresh")))
+        WAIT.until(ExpectedConditions.elementToBeClickable(refreshButton))
                 .click();
-        driver.switchTo().frame(new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.presenceOfElementLocated(By.id("ifmail"))));
-        return new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("td[colspan='3'] + td > h3")))
+        driver.switchTo().frame(WAIT
+                .until(ExpectedConditions.presenceOfElementLocated(mailFrame)));
+        return WAIT.until(ExpectedConditions.presenceOfElementLocated(totalMonthlyPrice))
                 .getText();
     }
 }
