@@ -14,20 +14,20 @@ public class GoogleCloudHomePage extends AbstractPage {
     private WebElement searchInput;
     private final By searchField = By.name("q");
 
-    public GoogleCloudHomePage (WebDriver driver) {
+    public GoogleCloudHomePage(WebDriver driver) {
         super(driver);
     }
 
-    public GoogleCloudHomePage openPage () {
+    public GoogleCloudHomePage openPage() {
         driver.get(HOMEPAGE_URL);
         searchInput = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS))
                 .until(ExpectedConditions.presenceOfElementLocated(searchField));
         return this;
     }
 
-    public SearchResultPage searchForTerms (String term) {
+    public SearchResultPage searchForTerms(String term) {
         searchInput.sendKeys(term);
         searchInput.submit();
-        return new SearchResultPage (driver, term);
+        return new SearchResultPage(driver, term);
     }
 }

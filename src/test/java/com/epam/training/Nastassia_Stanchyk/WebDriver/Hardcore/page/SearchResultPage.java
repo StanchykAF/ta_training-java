@@ -11,15 +11,15 @@ import java.util.List;
 
 public class SearchResultPage extends AbstractPage {
 
-    private String searchTerm;
+    private final String searchTerm;
     private final By searchResultsLocator = By.cssSelector("a.gs-title");
 
-    public SearchResultPage (WebDriver driver, String searchTerm) {
+    public SearchResultPage(WebDriver driver, String searchTerm) {
         super(driver);
         this.searchTerm = searchTerm;
     }
 
-    public GoogleCloudPricingCalculatorPage openGoogleCloudPricingCalculatorPage () {
+    public GoogleCloudPricingCalculatorPage openGoogleCloudPricingCalculatorPage() {
         List<WebElement> searchResults = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS))
                 .until(ExpectedConditions.presenceOfAllElementsLocatedBy(searchResultsLocator));
         for (WebElement element : searchResults) {

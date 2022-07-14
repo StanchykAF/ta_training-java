@@ -15,11 +15,11 @@ public class YopmailInboxPage extends AbstractPage {
     private final By mailFrame = By.id("ifmail");
     private final By totalMonthlyPrice = By.cssSelector("td[colspan='3'] + td > h3");
 
-    public YopmailInboxPage (WebDriver driver) {
+    public YopmailInboxPage(WebDriver driver) {
         super(driver);
     }
 
-    public String checkTotalMonthlyPrice () {
+    public String checkTotalMonthlyPrice() {
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {

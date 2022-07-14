@@ -14,17 +14,17 @@ public class YopmailEmailGeneratorPage extends AbstractPage {
     private final By copyButton = By.id("cprnd");
     private final By checkInboxButton = By.xpath("//button/span[text()='Проверить почту']");
 
-    public YopmailEmailGeneratorPage (WebDriver driver) {
+    public YopmailEmailGeneratorPage(WebDriver driver) {
         super(driver);
     }
 
-    public YopmailEmailGeneratorPage copyEmailAddress () {
+    public YopmailEmailGeneratorPage copyEmailAddress() {
         WAIT.until(ExpectedConditions.elementToBeClickable(copyButton))
                 .click();
         return this;
     }
 
-    public YopmailInboxPage checkInboxMail () {
+    public YopmailInboxPage checkInboxMail() {
         WAIT.until(ExpectedConditions.elementToBeClickable(checkInboxButton))
                 .click();
         return new YopmailInboxPage(driver);

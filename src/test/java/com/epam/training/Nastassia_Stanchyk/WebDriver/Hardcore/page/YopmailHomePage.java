@@ -15,11 +15,11 @@ public class YopmailHomePage extends AbstractPage {
 
     private final By generateEmailButtonLocator = By.cssSelector("#listeliens > a[href='email-generator']");
 
-    public YopmailHomePage (WebDriver driver) {
+    public YopmailHomePage(WebDriver driver) {
         super(driver);
     }
 
-    public YopmailHomePage openPage () {
+    public YopmailHomePage openPage() {
         driver.get(HOMEPAGE_URL);
         generateButton = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS))
                 .until(ExpectedConditions.presenceOfElementLocated(generateEmailButtonLocator));

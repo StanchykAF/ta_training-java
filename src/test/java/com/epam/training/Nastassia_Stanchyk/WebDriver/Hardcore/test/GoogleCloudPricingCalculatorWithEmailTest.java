@@ -37,7 +37,7 @@ public class GoogleCloudPricingCalculatorWithEmailTest {
         formData.setGPUType("NVIDIA Tesla V100");
         formData.setLocalSSD("2x375 GB");
         formData.setDatacenterLocation("Frankfurt");
-        formData.setCommittedUsage("1 Year");;
+        formData.setCommittedUsage("1 Year");
         GoogleCloudPricingCalculatorPage actualPricingResults = new GoogleCloudHomePage(driver)
                 .openPage()
                 .searchForTerms(searchTerm)
@@ -61,7 +61,7 @@ public class GoogleCloudPricingCalculatorWithEmailTest {
                 .checkTotalMonthlyPrice();
     }
 
-    @Test
+    @Test(description = "Check equals between total price from site and from email")
     public void checkTotalPricePerMonthTest () {
         Assert.assertTrue(
                 totalMonthlyPriceFromForm.contains(totalMonthlyPriceFromEmail),
