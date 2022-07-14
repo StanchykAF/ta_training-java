@@ -4,9 +4,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
 
 public class GoogleCloudHomePage extends AbstractPage {
 
@@ -18,14 +15,14 @@ public class GoogleCloudHomePage extends AbstractPage {
         super(driver);
     }
 
+    @Override
     public GoogleCloudHomePage openPage() {
-        driver.get(HOMEPAGE_URL);
-        searchInput = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS))
-                .until(ExpectedConditions.presenceOfElementLocated(searchField));
+        driver.navigate().to(HOMEPAGE_URL);
         return this;
     }
 
     public SearchResultPage searchForTerms(String term) {
+        searchInput = driverWait().until(ExpectedConditions.presenceOfElementLocated(searchField));
         searchInput.sendKeys(term);
         searchInput.submit();
         return new SearchResultPage(driver, term);

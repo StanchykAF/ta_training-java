@@ -3,13 +3,8 @@ package com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.page;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
 
 public class YopmailInboxPage extends AbstractPage {
-
-    private final WebDriverWait WAIT = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS));
 
     private final By refreshButton = By.id("refresh");
     private final By mailFrame = By.id("ifmail");
@@ -19,17 +14,22 @@ public class YopmailInboxPage extends AbstractPage {
         super(driver);
     }
 
+    @Override
+    public YopmailInboxPage openPage() throws RuntimeException {
+        throw new RuntimeException("You should authorised first");
+    }
+
     public String checkTotalMonthlyPrice() {
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        WAIT.until(ExpectedConditions.elementToBeClickable(refreshButton))
+        driverWait().until(ExpectedConditions.elementToBeClickable(refreshButton))
                 .click();
-        driver.switchTo().frame(WAIT
+        driver.switchTo().frame(driverWait()
                 .until(ExpectedConditions.presenceOfElementLocated(mailFrame)));
-        return WAIT.until(ExpectedConditions.presenceOfElementLocated(totalMonthlyPrice))
+        return driverWait().until(ExpectedConditions.presenceOfElementLocated(totalMonthlyPrice))
                 .getText();
     }
 }

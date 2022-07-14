@@ -7,19 +7,17 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GoogleCloudPricingCalculatorPage extends AbstractPage {
 
-    private final WebDriverWait WAIT = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS));
+    private static final String BASE_URL = "https://cloud.google.com/products/calculator";
     private static final String DEFAULT_DROPDOWN_OPTION_LOCATOR = "//div[contains(@class, 'md-active')]" +
             "//md-option/div[contains(text(), '%s')]";
 
@@ -79,7 +77,7 @@ public class GoogleCloudPricingCalculatorPage extends AbstractPage {
 
     public GoogleCloudPricingCalculatorPage calculatePrice(FormData formData) {
 
-        driver.switchTo().frame(WAIT
+        driver.switchTo().frame(driverWait()
                 .until(ExpectedConditions.presenceOfElementLocated(mainFrame)));
         driver.switchTo().frame(driver.findElement(innerFrame));
 
@@ -100,7 +98,7 @@ public class GoogleCloudPricingCalculatorPage extends AbstractPage {
     }
 
     public GoogleCloudPricingCalculatorPage pressTheEMAILButton() {
-        driver.switchTo().frame(WAIT
+        driver.switchTo().frame(driverWait()
                 .until(ExpectedConditions.presenceOfElementLocated(mainFrame)));
         driver.switchTo().frame(driver.findElement(innerFrame));
 
@@ -111,7 +109,7 @@ public class GoogleCloudPricingCalculatorPage extends AbstractPage {
     public GoogleCloudPricingCalculatorPage sendEstimatedFormToEmail() {
         try {
             String copiedText = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
-            WAIT.until(ExpectedConditions.presenceOfElementLocated(emailInput))
+            driverWait().until(ExpectedConditions.presenceOfElementLocated(emailInput))
                     .sendKeys(copiedText);
         } catch (UnsupportedFlavorException | IOException e) {
             e.printStackTrace();
@@ -123,7 +121,7 @@ public class GoogleCloudPricingCalculatorPage extends AbstractPage {
     public List<String> getCalculatedForm() {
         List<String> calculatedFormText = new ArrayList<>();
         List<WebElement> calculatedForm =
-                WAIT.until(ExpectedConditions.presenceOfAllElementsLocatedBy(resultBlock));
+                driverWait().until(ExpectedConditions.presenceOfAllElementsLocatedBy(resultBlock));
         for (WebElement element : calculatedForm) {
             calculatedFormText.add(element.getText());
         }
@@ -131,7 +129,7 @@ public class GoogleCloudPricingCalculatorPage extends AbstractPage {
     }
 
     public String getTotalMonthlyPrice() {
-        return WAIT.until(ExpectedConditions.presenceOfElementLocated(totalMonthlyPrice)).getText();
+        return driverWait().until(ExpectedConditions.presenceOfElementLocated(totalMonthlyPrice)).getText();
     }
 
     public GoogleCloudPricingCalculatorPage selectOperatingSystem(String operatingSystem) {
@@ -188,11 +186,17 @@ public class GoogleCloudPricingCalculatorPage extends AbstractPage {
         return this;
     }
 
+    @Override
+    public GoogleCloudPricingCalculatorPage openPage() {
+        driver.navigate().to(BASE_URL);
+        return this;
+    }
+
     private void selectDropdownOption(String option) {
         WebElement dropdownOption =
-                WAIT.until(ExpectedConditions.presenceOfElementLocated(By.xpath(String.format(DEFAULT_DROPDOWN_OPTION_LOCATOR,
+                driverWait().until(ExpectedConditions.presenceOfElementLocated(By.xpath(String.format(DEFAULT_DROPDOWN_OPTION_LOCATOR,
                         option))));
         dropdownOption.click();
-        WAIT.until(ExpectedConditions.invisibilityOf(dropdownOption));
+        driverWait().until(ExpectedConditions.invisibilityOf(dropdownOption));
     }
 }
