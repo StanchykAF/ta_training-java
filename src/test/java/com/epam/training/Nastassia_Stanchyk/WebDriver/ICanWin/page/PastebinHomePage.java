@@ -10,38 +10,38 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.List;
 
 public class PastebinHomePage extends AbstractPage {
     private static final String HOMEPAGE_URL = "http://pastebin.com";
     private final WebDriverWait WAIT = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS));
 
-    @FindBy (id = "postform-text")
+    @FindBy(id = "postform-text")
     private WebElement pasteFormText;
 
-    @FindBy (css = "#postform-expiration + span")
+    @FindBy(css = "#postform-expiration + span")
     private WebElement pasteExpirationTime;
 
-    @FindBy (id = "postform-name")
+    @FindBy(id = "postform-name")
     private WebElement pasteName;
 
-    @FindBy (xpath = "//button[@class='btn -big']")
+    @FindBy(xpath = "//button[@class='btn -big']")
     private WebElement createNewPasteButton;
 
-    private final By pasteExpirationTimeDropdownList = By.cssSelector("#select2-postform-expiration-results > li");
+    private final static String PASTE_EXPIRATION_DROPDOWN_OPTION = "//ul[@id='select2-postform-expiration-results']" +
+            "/li[contains(text(), '%s')]";
 
-    public PastebinHomePage (WebDriver driver) {
+    public PastebinHomePage(WebDriver driver) {
         super(driver);
         PageFactory.initElements(driver, this);
     }
 
-    public PastebinHomePage openPage () {
+    public PastebinHomePage openPage() {
         driver.get(HOMEPAGE_URL);
         closeCookiesWindow();
         return this;
     }
 
-    public PastebinHomePage createNewPaste (PasteFormOptions pasteFormOptions) {
+    public PastebinHomePage createNewPaste(PasteFormOptions pasteFormOptions) {
         pasteFormText.sendKeys(pasteFormOptions.getPasteText());
         setPasteExpirationTime(pasteFormOptions.getPasteExpirationTime());
         pasteName.sendKeys(pasteFormOptions.getPasteTitle());
@@ -50,16 +50,10 @@ public class PastebinHomePage extends AbstractPage {
         return this;
     }
 
-    private void setPasteExpirationTime (String time) {
+    private void setPasteExpirationTime(String time) {
         pasteExpirationTime.click();
-        List<WebElement> pasteExpirationTimeList = WAIT
-                .until(ExpectedConditions.presenceOfAllElementsLocatedBy(pasteExpirationTimeDropdownList));
-        for (WebElement element : pasteExpirationTimeList) {
-            if (time.equalsIgnoreCase(element.getText())) {
-                element.click();
-                return;
-            }
-        }
-        throw new RuntimeException("Entered time value is incorrect");
+        WAIT.until(ExpectedConditions.presenceOfElementLocated(By.xpath(String.format(PASTE_EXPIRATION_DROPDOWN_OPTION,
+                        time))))
+                .click();
     }
 }
