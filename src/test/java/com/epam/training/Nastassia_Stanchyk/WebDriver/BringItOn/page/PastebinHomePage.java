@@ -11,11 +11,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.List;
 
 public class PastebinHomePage extends AbstractPage {
     private static final String HOMEPAGE_URL = "http://pastebin.com";
-    private WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS));
+    private final WebDriverWait WAIT = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS));
 
     @FindBy (id = "postform-text")
     private WebElement pasteFormText;
@@ -32,9 +31,10 @@ public class PastebinHomePage extends AbstractPage {
     @FindBy (css = "#postform-format + span")
     private WebElement syntaxHighlight;
 
-    private final By pasteExpirationTimeDropdownList = By.cssSelector("#select2-postform-expiration-results > li");
-    private final By syntaxHighlightDropdownSearch = By.cssSelector("span.select2-search.select2-search--dropdown > input");
-    private final By syntaxHighlightSearchResults = By.cssSelector("#select2-postform-format-results > li[aria-label~='ALL'] > ul > li");
+    private static final String PASTE_EXPIRATION_DROPDOWN_OPTION = "//ul[@id='select2-postform-expiration-results']" +
+        "/li[contains(text(), '%s')]";
+    private static final String SYNTAX_HIGHLIGHT_DROPDOWN_OPTION = "//ul[@id='select2-postform-format-results']/li/ul" +
+        "/li[contains(text(), '%s')]";
 
     public PastebinHomePage (WebDriver driver) {
         super(driver);
@@ -59,29 +59,15 @@ public class PastebinHomePage extends AbstractPage {
 
     private void setPasteExpirationTime (String time) {
         pasteExpirationTime.click();
-        List<WebElement> pasteExpirationTimeList = wait
-                .until(ExpectedConditions.presenceOfAllElementsLocatedBy(pasteExpirationTimeDropdownList));
-        for (WebElement element : pasteExpirationTimeList) {
-            if (time.equalsIgnoreCase(element.getText())) {
-                element.click();
-                return;
-            }
-        }
-        throw new RuntimeException("Entered time value is incorrect");
+        WAIT.until(ExpectedConditions.presenceOfElementLocated(By.xpath(String.format(PASTE_EXPIRATION_DROPDOWN_OPTION,
+                time))))
+                .click();
     }
 
     private void setSyntaxHighlight (String syntax) {
         syntaxHighlight.click();
-        WebElement syntaxInput = wait.until(ExpectedConditions.presenceOfElementLocated(syntaxHighlightDropdownSearch));
-        syntaxInput.sendKeys(syntax);
-        List<WebElement> syntaxList = wait
-                .until(ExpectedConditions.presenceOfAllElementsLocatedBy(syntaxHighlightSearchResults));
-        for (WebElement element : syntaxList) {
-            if (syntax.equalsIgnoreCase(element.getText())) {
-                element.click();
-                return;
-            }
-        }
-        throw new RuntimeException("Entered language is missing in dropdown list");
+        WAIT.until(ExpectedConditions.presenceOfElementLocated(By.xpath(String.format(SYNTAX_HIGHLIGHT_DROPDOWN_OPTION,
+         syntax))))
+                .click();
     }
 }

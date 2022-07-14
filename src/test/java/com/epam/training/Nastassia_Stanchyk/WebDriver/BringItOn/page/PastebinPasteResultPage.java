@@ -10,7 +10,7 @@ import java.time.Duration;
 
 public class PastebinPasteResultPage extends AbstractPage {
 
-    private WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS));
+    private final WebDriverWait WAIT = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS));
 
     private final By title = By.cssSelector(".info-top h1");
     private final By syntax = By.cssSelector("div.left > a");
@@ -21,17 +21,17 @@ public class PastebinPasteResultPage extends AbstractPage {
     }
 
     public String getTitle() {
-        return wait.until(ExpectedConditions.presenceOfElementLocated(title))
+        return WAIT.until(ExpectedConditions.presenceOfElementLocated(title))
                 .getText();
     }
 
     public String getSyntaxHighlight() {
-        return wait.until(ExpectedConditions.presenceOfElementLocated(syntax))
+        return WAIT.until(ExpectedConditions.presenceOfElementLocated(syntax))
                 .getText();
     }
 
     public String getText() {
-        return wait.until(ExpectedConditions.presenceOfElementLocated(sourceCode))
+        return WAIT.until(ExpectedConditions.presenceOfElementLocated(sourceCode))
                 .getText();
     }
 }
