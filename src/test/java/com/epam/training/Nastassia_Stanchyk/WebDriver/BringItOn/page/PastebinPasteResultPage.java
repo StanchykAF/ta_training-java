@@ -1,51 +1,37 @@
 package com.epam.training.Nastassia_Stanchyk.WebDriver.BringItOn.page;
 
+import com.epam.training.Nastassia_Stanchyk.WebDriver.ICanWin.page.AbstractPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
 
-public class PastebinPasteResultPage {
+public class PastebinPasteResultPage extends AbstractPage {
 
-    private WebDriver driver;
-    private String pasteText;
-    private String pasteTitle;
+    private final WebDriverWait WAIT = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS));
 
-    public PastebinPasteResultPage (WebDriver driver, String pasteText, String pasteTitle) {
-        this.driver = driver;
-        this.pasteText = pasteText;
-        this.pasteTitle = pasteTitle;
-        PageFactory.initElements(driver, this);
+    private final By title = By.cssSelector(".info-top h1");
+    private final By syntax = By.cssSelector("div.left > a");
+    private final By sourceCode = By.cssSelector(".highlighted-code > div.source");
+
+    public PastebinPasteResultPage (WebDriver driver) {
+        super(driver);
     }
 
-    public List<String> checkPaste() {
-        List<String> pasteResults = new ArrayList<>();
-        pasteResults.add(checkTitle());
-        pasteResults.add(checkSyntaxHighlight());
-        pasteResults.add(checkText());
-        return pasteResults;
-    }
-
-    public String checkTitle () {
-        return new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".info-top h1")))
+    public String getTitle() {
+        return WAIT.until(ExpectedConditions.presenceOfElementLocated(title))
                 .getText();
     }
 
-    public String checkSyntaxHighlight () {
-        return new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class='left']/a[@class='btn -small h_800']")))
+    public String getSyntaxHighlight() {
+        return WAIT.until(ExpectedConditions.presenceOfElementLocated(syntax))
                 .getText();
     }
 
-    public String checkText() {
-        return new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@class=\"highlighted-code\"]/div[@class=\"source\"]")))
+    public String getText() {
+        return WAIT.until(ExpectedConditions.presenceOfElementLocated(sourceCode))
                 .getText();
     }
 }

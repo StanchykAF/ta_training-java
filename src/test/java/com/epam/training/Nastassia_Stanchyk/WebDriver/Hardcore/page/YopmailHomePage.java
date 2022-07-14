@@ -8,20 +8,21 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class YopmailHomePage {
+public class YopmailHomePage extends AbstractPage {
 
     private static final String HOMEPAGE_URL = "https://yopmail.com/";
-    private WebDriver driver;
     private WebElement generateButton;
 
-    public YopmailHomePage (WebDriver driver) {
-        this.driver = driver;
+    private final By generateEmailButtonLocator = By.cssSelector("#listeliens > a[href='email-generator']");
+
+    public YopmailHomePage(WebDriver driver) {
+        super(driver);
     }
 
-    public YopmailHomePage openPage () {
+    public YopmailHomePage openPage() {
         driver.get(HOMEPAGE_URL);
-        generateButton = new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#listeliens > a[href='email-generator']")));
+        generateButton = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS))
+                .until(ExpectedConditions.presenceOfElementLocated(generateEmailButtonLocator));
         return this;
     }
 

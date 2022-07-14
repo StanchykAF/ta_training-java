@@ -1,5 +1,6 @@
 package com.epam.training.Nastassia_Stanchyk.WebDriver.ICanWin.page;
 
+import com.epam.training.Nastassia_Stanchyk.WebDriver.ICanWin.model.PasteFormOptions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -10,43 +11,49 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class PastebinHomePage {
+public class PastebinHomePage extends AbstractPage {
     private static final String HOMEPAGE_URL = "http://pastebin.com";
-    private WebDriver driver;
+    private final WebDriverWait WAIT = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS));
 
-    @FindBy (id = "postform-text")
-    private WebElement pasteForm;
+    @FindBy(id = "postform-text")
+    private WebElement pasteFormText;
 
-    @FindBy (xpath = "//*[@id=\"w0\"]/div[5]/div[1]/div[2]/div/span")
-    private WebElement pasteExpiration;
+    @FindBy(css = "#postform-expiration + span")
+    private WebElement pasteExpirationTime;
 
-    @FindBy (id = "postform-name")
+    @FindBy(id = "postform-name")
     private WebElement pasteName;
 
-    @FindBy (xpath = "//button[@class='btn -big']")
+    @FindBy(xpath = "//button[@class='btn -big']")
     private WebElement createNewPasteButton;
 
-    public PastebinHomePage (WebDriver driver) {
-        this.driver = driver;
+    private final static String PASTE_EXPIRATION_DROPDOWN_OPTION = "//ul[@id='select2-postform-expiration-results']" +
+            "/li[contains(text(), '%s')]";
+
+    public PastebinHomePage(WebDriver driver) {
+        super(driver);
         PageFactory.initElements(driver, this);
     }
 
-    public PastebinHomePage openPage () {
+    public PastebinHomePage openPage() {
         driver.get(HOMEPAGE_URL);
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.presenceOfElementLocated(By.id("postform-text")));
+        closeCookiesWindow();
         return this;
     }
 
-    public void createNewPaste (String pasteText, String pasteTitle) {
-        pasteForm.sendKeys(pasteText);
-
-        pasteExpiration.click();
-        new WebDriverWait(driver, Duration.ofSeconds(10))
-                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@id=\"select2-postform-expiration-results\"]/li[3]")))
-                .click();
-
-        pasteName.sendKeys(pasteTitle);
+    public PastebinHomePage createNewPaste(PasteFormOptions pasteFormOptions) {
+        pasteFormText.sendKeys(pasteFormOptions.getPasteText());
+        setPasteExpirationTime(pasteFormOptions.getPasteExpirationTime());
+        pasteName.sendKeys(pasteFormOptions.getPasteTitle());
         createNewPasteButton.click();
+        closeCookiesWindow();
+        return this;
+    }
+
+    private void setPasteExpirationTime(String time) {
+        pasteExpirationTime.click();
+        WAIT.until(ExpectedConditions.presenceOfElementLocated(By.xpath(String.format(PASTE_EXPIRATION_DROPDOWN_OPTION,
+                        time))))
+                .click();
     }
 }
