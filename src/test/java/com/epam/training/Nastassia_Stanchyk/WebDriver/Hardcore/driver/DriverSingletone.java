@@ -1,8 +1,11 @@
 package com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.driver;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.safari.SafariDriver;
+
+import java.sql.DriverManager;
 
 public class DriverSingletone {
 
@@ -15,9 +18,11 @@ public class DriverSingletone {
         if (driver == null) {
             switch (System.getProperty("browser")) {
                 case "safari": {
+                    WebDriverManager.safaridriver().setup();
                     driver = new SafariDriver();
                 }
                 default: {
+                    WebDriverManager.chromedriver().setup();
                     driver = new ChromeDriver();
                 }
             }
