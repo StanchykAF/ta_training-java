@@ -3,7 +3,7 @@ package com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.model;
 import lombok.Data;
 
 @Data
-public class FormData {
+public class ComputeEngineInstancesForm {
 
     private String numberOfInstances;
     private String operationSystem;

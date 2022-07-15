@@ -1,6 +1,8 @@
 package com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.page;
 
-import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.model.FormData;
+import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.model.ComputeEngineInstancesForm;
+import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.model.EmailEstimateForm;
+import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.service.EmailEstimateFormCompleting;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -16,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GoogleCloudPricingCalculatorPage extends AbstractPage {
+
+    public EmailEstimateForm emailEstimateForm;
 
     private static final String BASE_URL = "https://cloud.google.com/products/calculator";
     private static final String DEFAULT_DROPDOWN_OPTION_LOCATOR = "//div[contains(@class, 'md-active')]" +
@@ -75,24 +79,24 @@ public class GoogleCloudPricingCalculatorPage extends AbstractPage {
         PageFactory.initElements(driver, this);
     }
 
-    public GoogleCloudPricingCalculatorPage calculatePrice(FormData formData) {
+    public GoogleCloudPricingCalculatorPage calculatePrice(ComputeEngineInstancesForm computeEngineInstancesForm) {
 
         driver.switchTo().frame(driverWait()
                 .until(ExpectedConditions.presenceOfElementLocated(mainFrame)));
         driver.switchTo().frame(driver.findElement(innerFrame));
 
         productName.click();
-        numberOfInstancesInput.sendKeys(formData.getNumberOfInstances());
-        selectOperatingSystem(formData.getOperationSystem());
-        selectVMClass(formData.getVMClass());
-        selectInstanceSeries(formData.getInstanceSeries());
-        selectInstanceType(formData.getInstanceType());
+        numberOfInstancesInput.sendKeys(computeEngineInstancesForm.getNumberOfInstances());
+        selectOperatingSystem(computeEngineInstancesForm.getOperationSystem());
+        selectVMClass(computeEngineInstancesForm.getVMClass());
+        selectInstanceSeries(computeEngineInstancesForm.getInstanceSeries());
+        selectInstanceType(computeEngineInstancesForm.getInstanceType());
         addGPUsCheckBox.click();
-        selectGPUType(formData.getGPUType());
-        selectNumberOfGPUs(formData.getNumberOfGPUs());
-        selectLocalSSD(formData.getLocalSSD());
-        selectDatacenterLocation(formData.getDatacenterLocation());
-        selectCommittedUsageTime(formData.getCommittedUsage());
+        selectGPUType(computeEngineInstancesForm.getGPUType());
+        selectNumberOfGPUs(computeEngineInstancesForm.getNumberOfGPUs());
+        selectLocalSSD(computeEngineInstancesForm.getLocalSSD());
+        selectDatacenterLocation(computeEngineInstancesForm.getDatacenterLocation());
+        selectCommittedUsageTime(computeEngineInstancesForm.getCommittedUsage());
         addToEstimateButton.click();
         return this;
     }
@@ -109,11 +113,12 @@ public class GoogleCloudPricingCalculatorPage extends AbstractPage {
     public GoogleCloudPricingCalculatorPage sendEstimatedFormToEmail() {
         try {
             String copiedText = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
-            driverWait().until(ExpectedConditions.presenceOfElementLocated(emailInput))
-                    .sendKeys(copiedText);
+            emailEstimateForm = EmailEstimateFormCompleting.completeEmailEstimateForm(copiedText);
         } catch (UnsupportedFlavorException | IOException e) {
             e.printStackTrace();
         }
+        driverWait().until(ExpectedConditions.presenceOfElementLocated(emailInput))
+                .sendKeys(emailEstimateForm.getEmailAddress());
         sendEmailButton.click();
         return this;
     }
