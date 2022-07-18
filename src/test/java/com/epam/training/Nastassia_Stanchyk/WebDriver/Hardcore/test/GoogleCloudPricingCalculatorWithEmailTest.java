@@ -1,6 +1,5 @@
 package com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.test;
 
-import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.model.CalculatedForm;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

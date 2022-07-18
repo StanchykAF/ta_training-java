@@ -1,5 +1,6 @@
 package com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.page;
 
+import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.util.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -32,11 +33,7 @@ public class SearchResultPage extends AbstractPage {
 
     @Override
     public SearchResultPage openPage() {
-        driver.navigate().to(BASE_URL.concat(searchString()));
+        driver.navigate().to(BASE_URL.concat(StringUtils.createSearchStringForURL(searchTerm)));
         return this;
-    }
-
-    private String searchString() {
-        return searchTerm.trim().replace("\s", "%20");
     }
 }

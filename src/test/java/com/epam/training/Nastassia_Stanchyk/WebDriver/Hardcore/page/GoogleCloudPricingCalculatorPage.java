@@ -3,6 +3,7 @@ package com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.page;
 import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.model.ComputeEngineInstancesForm;
 import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.model.EmailEstimateForm;
 import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.service.EmailEstimateFormCompleting;
+import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.util.ActionUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -139,55 +140,55 @@ public class GoogleCloudPricingCalculatorPage extends AbstractPage {
 
     public GoogleCloudPricingCalculatorPage selectOperatingSystem(String operatingSystem) {
         operatingSystemDropdown.click();
-        selectDropdownOption(operatingSystem);
+        ActionUtils.selectDropdownOption(DEFAULT_DROPDOWN_OPTION_LOCATOR, operatingSystem, driverWait());
         return this;
     }
 
     public GoogleCloudPricingCalculatorPage selectVMClass(String VMClass) {
         VMClassDropdown.click();
-        selectDropdownOption(VMClass);
+        ActionUtils.selectDropdownOption(DEFAULT_DROPDOWN_OPTION_LOCATOR, VMClass, driverWait());
         return this;
     }
 
     public GoogleCloudPricingCalculatorPage selectInstanceSeries(String series) {
         instanceSeriesDropdown.click();
-        selectDropdownOption(series);
+        ActionUtils.selectDropdownOption(DEFAULT_DROPDOWN_OPTION_LOCATOR, series, driverWait());
         return this;
     }
 
     public GoogleCloudPricingCalculatorPage selectInstanceType(String instanceType) {
         instanceTypeDropdown.click();
-        selectDropdownOption(instanceType);
+        ActionUtils.selectDropdownOption(DEFAULT_DROPDOWN_OPTION_LOCATOR, instanceType, driverWait());
         return this;
     }
 
     public GoogleCloudPricingCalculatorPage selectGPUType(String GPUType) {
         GPUTypeDropdown.click();
-        selectDropdownOption(GPUType);
+        ActionUtils.selectDropdownOption(DEFAULT_DROPDOWN_OPTION_LOCATOR, GPUType, driverWait());
         return this;
     }
 
     public GoogleCloudPricingCalculatorPage selectNumberOfGPUs(String numberOfGPUs) {
         numberOfGPUsDropdown.click();
-        selectDropdownOption(numberOfGPUs);
+        ActionUtils.selectDropdownOption(DEFAULT_DROPDOWN_OPTION_LOCATOR, numberOfGPUs, driverWait());
         return this;
     }
 
     public GoogleCloudPricingCalculatorPage selectLocalSSD(String localSSD) {
         localSSDDropdown.click();
-        selectDropdownOption(localSSD);
+        ActionUtils.selectDropdownOption(DEFAULT_DROPDOWN_OPTION_LOCATOR, localSSD, driverWait());
         return this;
     }
 
     public GoogleCloudPricingCalculatorPage selectDatacenterLocation(String datacenterLocation) {
         datacenterLocationDropdown.click();
-        selectDropdownOption(datacenterLocation);
+        ActionUtils.selectDropdownOption(DEFAULT_DROPDOWN_OPTION_LOCATOR, datacenterLocation, driverWait());
         return this;
     }
 
     public GoogleCloudPricingCalculatorPage selectCommittedUsageTime(String committedUsage) {
         committedUsageDropdown.click();
-        selectDropdownOption(committedUsage);
+        ActionUtils.selectDropdownOption(DEFAULT_DROPDOWN_OPTION_LOCATOR, committedUsage, driverWait());
         return this;
     }
 
@@ -195,13 +196,5 @@ public class GoogleCloudPricingCalculatorPage extends AbstractPage {
     public GoogleCloudPricingCalculatorPage openPage() {
         driver.navigate().to(BASE_URL);
         return this;
-    }
-
-    private void selectDropdownOption(String option) {
-        WebElement dropdownOption =
-                driverWait().until(ExpectedConditions.presenceOfElementLocated(By.xpath(String.format(DEFAULT_DROPDOWN_OPTION_LOCATOR,
-                        option))));
-        dropdownOption.click();
-        driverWait().until(ExpectedConditions.invisibilityOf(dropdownOption));
     }
 }
