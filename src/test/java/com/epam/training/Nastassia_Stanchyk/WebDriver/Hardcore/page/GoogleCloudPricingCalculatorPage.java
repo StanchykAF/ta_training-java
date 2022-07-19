@@ -4,6 +4,8 @@ import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.model.ComputeEngi
 import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.model.EmailEstimateForm;
 import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.service.EmailEstimateFormCompleting;
 import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.util.ActionUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -20,11 +22,13 @@ import java.util.List;
 
 public class GoogleCloudPricingCalculatorPage extends AbstractPage {
 
-    public EmailEstimateForm emailEstimateForm;
+//    public EmailEstimateForm emailEstimateForm;
 
     private static final String BASE_URL = "https://cloud.google.com/products/calculator";
     private static final String DEFAULT_DROPDOWN_OPTION_LOCATOR = "//div[contains(@class, 'md-active')]" +
             "//md-option/div[contains(text(), '%s')]";
+
+    private final Logger logger = LogManager.getRootLogger();
 
     @FindBy(css = "div.compute[title='Compute Engine']")
     private WebElement productName;
@@ -81,7 +85,9 @@ public class GoogleCloudPricingCalculatorPage extends AbstractPage {
     }
 
     public GoogleCloudPricingCalculatorPage calculatePrice(ComputeEngineInstancesForm computeEngineInstancesForm) {
-
+//      TODO: 1 remove switch to frame from here to own method
+//      TODO: 2 productName, addGPUsCheckBox, addToEstimateButton click - to own methods
+//      TODO: 3 remove this method to CommonConditions?
         driver.switchTo().frame(driverWait()
                 .until(ExpectedConditions.presenceOfElementLocated(mainFrame)));
         driver.switchTo().frame(driver.findElement(innerFrame));
@@ -99,10 +105,12 @@ public class GoogleCloudPricingCalculatorPage extends AbstractPage {
         selectDatacenterLocation(computeEngineInstancesForm.getDatacenterLocation());
         selectCommittedUsageTime(computeEngineInstancesForm.getCommittedUsage());
         addToEstimateButton.click();
+        logger.info("Add to estimate");
         return this;
     }
 
     public GoogleCloudPricingCalculatorPage pressTheEMAILButton() {
+//      TODO: remove switch to frame from here to own method
         driver.switchTo().frame(driverWait()
                 .until(ExpectedConditions.presenceOfElementLocated(mainFrame)));
         driver.switchTo().frame(driver.findElement(innerFrame));
@@ -111,15 +119,9 @@ public class GoogleCloudPricingCalculatorPage extends AbstractPage {
         return this;
     }
 
-    public GoogleCloudPricingCalculatorPage sendEstimatedFormToEmail() {
-        try {
-            String copiedText = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
-            emailEstimateForm = EmailEstimateFormCompleting.completeEmailEstimateForm(copiedText);
-        } catch (UnsupportedFlavorException | IOException e) {
-            e.printStackTrace();
-        }
+    public GoogleCloudPricingCalculatorPage sendEstimatedFormToEmail(String emailAddress) {
         driverWait().until(ExpectedConditions.presenceOfElementLocated(emailInput))
-                .sendKeys(emailEstimateForm.getEmailAddress());
+                .sendKeys(emailAddress);
         sendEmailButton.click();
         return this;
     }
