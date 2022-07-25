@@ -1,30 +1,27 @@
 package com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.page;
 
-import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.model.FormData;
+import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.model.GoogleCloudMainForm;
+import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.util.ActionUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GoogleCloudPricingCalculatorPage extends AbstractPage {
 
-    private final WebDriverWait WAIT = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS));
-    private static final String DEFAULT_DROPDOWN_OPTION_LOCATOR = "//div[contains(@class, 'md-active')]" +
+    private static final String BASE_URL = "https://cloud.google.com/products/calculator";
+    private static final String DEFAULT_DROPDOWN_OPTION_XPATH = "//div[contains(@class, 'md-active')]" +
             "//md-option/div[contains(text(), '%s')]";
+    private static final String PRODUCT_NAME_XPATH = "//div[contains(@title, '%s')]";
 
-    @FindBy(css = "div.compute[title='Compute Engine']")
-    private WebElement productName;
+    private final Logger logger = LogManager.getRootLogger();
 
     @FindBy(css = "form[name='ComputeEngineForm'] > div > div > md-input-container > input[name='quantity']")
     private WebElement numberOfInstancesInput;
@@ -43,9 +40,6 @@ public class GoogleCloudPricingCalculatorPage extends AbstractPage {
 
     @FindBy(css = "md-checkbox[ng-model='listingCtrl.computeServer.addGPUs'] > div.md-container.md-ink-ripple")
     private WebElement addGPUsCheckBox;
-
-    @FindBy(css = "md-select[aria-label^='GPU type']")
-    private WebElement GPUTypeDropdown;
 
     @FindBy(css = "md-select[aria-label^='Number of GPUs']")
     private WebElement numberOfGPUsDropdown;
@@ -71,51 +65,71 @@ public class GoogleCloudPricingCalculatorPage extends AbstractPage {
     private final By totalMonthlyPrice = By.cssSelector("#resultBlock > md-card > md-card-content > div > div > div > h2 > b");
     private final By emailButton = By.id("email_quote");
     private final By emailInput = By.cssSelector("form[name='emailForm'] input[type='email']");
+    private final By GPUTypeDropdown = By.cssSelector("md-select[aria-label^='GPU type']");
 
     public GoogleCloudPricingCalculatorPage(WebDriver driver) {
         super(driver);
         PageFactory.initElements(driver, this);
     }
 
-    public GoogleCloudPricingCalculatorPage calculatePrice(FormData formData) {
+    public GoogleCloudPricingCalculatorPage addToEstimateMainForm(GoogleCloudMainForm googleCloudMainForm) {
+        switchToFrame(mainFrame)
+                .switchToFrame(innerFrame)
+                .selectProduct(googleCloudMainForm.getProductName())
+                .setNumberOfInstances(googleCloudMainForm.getNumberOfInstances())
+                .selectOperatingSystem(googleCloudMainForm.getOperationSystem())
+                .selectVMClass(googleCloudMainForm.getVMClass())
+                .selectInstanceSeries(googleCloudMainForm.getInstanceSeries())
+                .selectInstanceType(googleCloudMainForm.getInstanceType())
+                .selectAddGPUsCheckBox()
+                .selectGPUType(googleCloudMainForm.getGPUType())
+                .selectNumberOfGPUs(googleCloudMainForm.getNumberOfGPUs())
+                .selectLocalSSD(googleCloudMainForm.getLocalSSD())
+                .selectDatacenterLocation(googleCloudMainForm.getDatacenterLocation())
+                .selectCommittedUsageTime(googleCloudMainForm.getCommittedUsage())
+                .clickAddToEstimateButton();
+        logger.info("Added to estimate");
+        return this;
+    }
 
-        driver.switchTo().frame(WAIT
-                .until(ExpectedConditions.presenceOfElementLocated(mainFrame)));
-        driver.switchTo().frame(driver.findElement(innerFrame));
+    public GoogleCloudPricingCalculatorPage switchToFrame (By frame) {
+        driver.switchTo().frame(driverWait()
+                .until(ExpectedConditions.presenceOfElementLocated(frame)));
+        return this;
+    }
 
-        productName.click();
-        numberOfInstancesInput.sendKeys(formData.getNumberOfInstances());
-        selectOperatingSystem(formData.getOperationSystem());
-        selectVMClass(formData.getVMClass());
-        selectInstanceSeries(formData.getInstanceSeries());
-        selectInstanceType(formData.getInstanceType());
-        addGPUsCheckBox.click();
-        selectGPUType(formData.getGPUType());
-        selectNumberOfGPUs(formData.getNumberOfGPUs());
-        selectLocalSSD(formData.getLocalSSD());
-        selectDatacenterLocation(formData.getDatacenterLocation());
-        selectCommittedUsageTime(formData.getCommittedUsage());
+    public GoogleCloudPricingCalculatorPage clickAddToEstimateButton () {
         addToEstimateButton.click();
         return this;
     }
 
-    public GoogleCloudPricingCalculatorPage pressTheEMAILButton() {
-        driver.switchTo().frame(WAIT
-                .until(ExpectedConditions.presenceOfElementLocated(mainFrame)));
-        driver.switchTo().frame(driver.findElement(innerFrame));
+    public GoogleCloudPricingCalculatorPage selectAddGPUsCheckBox () {
+        addGPUsCheckBox.click();
+        return this;
+    }
 
+    public GoogleCloudPricingCalculatorPage selectProduct (String productName) {
+        driverWait().until(ExpectedConditions.presenceOfElementLocated(By.xpath(String.format(PRODUCT_NAME_XPATH,
+                productName))))
+                .click();
+        return this;
+    }
+
+    public GoogleCloudPricingCalculatorPage setNumberOfInstances (String numberOfInstances) {
+        numberOfInstancesInput.sendKeys(numberOfInstances);
+        return this;
+    }
+
+    public GoogleCloudPricingCalculatorPage clickTheEMAILButton() {
+        switchToFrame(mainFrame)
+                .switchToFrame(innerFrame);
         driver.findElement(emailButton).click();
         return this;
     }
 
-    public GoogleCloudPricingCalculatorPage sendEstimatedFormToEmail() {
-        try {
-            String copiedText = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
-            WAIT.until(ExpectedConditions.presenceOfElementLocated(emailInput))
-                    .sendKeys(copiedText);
-        } catch (UnsupportedFlavorException | IOException e) {
-            e.printStackTrace();
-        }
+    public GoogleCloudPricingCalculatorPage sendEstimatedFormToEmail(String emailAddress) {
+        driverWait().until(ExpectedConditions.presenceOfElementLocated(emailInput))
+                .sendKeys(emailAddress);
         sendEmailButton.click();
         return this;
     }
@@ -123,7 +137,7 @@ public class GoogleCloudPricingCalculatorPage extends AbstractPage {
     public List<String> getCalculatedForm() {
         List<String> calculatedFormText = new ArrayList<>();
         List<WebElement> calculatedForm =
-                WAIT.until(ExpectedConditions.presenceOfAllElementsLocatedBy(resultBlock));
+                driverWait().until(ExpectedConditions.presenceOfAllElementsLocatedBy(resultBlock));
         for (WebElement element : calculatedForm) {
             calculatedFormText.add(element.getText());
         }
@@ -131,68 +145,66 @@ public class GoogleCloudPricingCalculatorPage extends AbstractPage {
     }
 
     public String getTotalMonthlyPrice() {
-        return WAIT.until(ExpectedConditions.presenceOfElementLocated(totalMonthlyPrice)).getText();
+        return driverWait().until(ExpectedConditions.presenceOfElementLocated(totalMonthlyPrice)).getText();
     }
 
     public GoogleCloudPricingCalculatorPage selectOperatingSystem(String operatingSystem) {
         operatingSystemDropdown.click();
-        selectDropdownOption(operatingSystem);
+        ActionUtils.selectDropdownOption(DEFAULT_DROPDOWN_OPTION_XPATH, operatingSystem, driverWait());
         return this;
     }
 
     public GoogleCloudPricingCalculatorPage selectVMClass(String VMClass) {
         VMClassDropdown.click();
-        selectDropdownOption(VMClass);
+        ActionUtils.selectDropdownOption(DEFAULT_DROPDOWN_OPTION_XPATH, VMClass, driverWait());
         return this;
     }
 
     public GoogleCloudPricingCalculatorPage selectInstanceSeries(String series) {
         instanceSeriesDropdown.click();
-        selectDropdownOption(series);
+        ActionUtils.selectDropdownOption(DEFAULT_DROPDOWN_OPTION_XPATH, series, driverWait());
         return this;
     }
 
     public GoogleCloudPricingCalculatorPage selectInstanceType(String instanceType) {
         instanceTypeDropdown.click();
-        selectDropdownOption(instanceType);
+        ActionUtils.selectDropdownOption(DEFAULT_DROPDOWN_OPTION_XPATH, instanceType, driverWait());
         return this;
     }
 
     public GoogleCloudPricingCalculatorPage selectGPUType(String GPUType) {
-        GPUTypeDropdown.click();
-        selectDropdownOption(GPUType);
+        driverWait().until(ExpectedConditions.presenceOfElementLocated(GPUTypeDropdown)).click();
+        ActionUtils.selectDropdownOption(DEFAULT_DROPDOWN_OPTION_XPATH, GPUType, driverWait());
         return this;
     }
 
     public GoogleCloudPricingCalculatorPage selectNumberOfGPUs(String numberOfGPUs) {
         numberOfGPUsDropdown.click();
-        selectDropdownOption(numberOfGPUs);
+        ActionUtils.selectDropdownOption(DEFAULT_DROPDOWN_OPTION_XPATH, numberOfGPUs, driverWait());
         return this;
     }
 
     public GoogleCloudPricingCalculatorPage selectLocalSSD(String localSSD) {
         localSSDDropdown.click();
-        selectDropdownOption(localSSD);
+        ActionUtils.selectDropdownOption(DEFAULT_DROPDOWN_OPTION_XPATH, localSSD, driverWait());
         return this;
     }
 
     public GoogleCloudPricingCalculatorPage selectDatacenterLocation(String datacenterLocation) {
         datacenterLocationDropdown.click();
-        selectDropdownOption(datacenterLocation);
+        ActionUtils.selectDropdownOption(DEFAULT_DROPDOWN_OPTION_XPATH, datacenterLocation, driverWait());
         return this;
     }
 
     public GoogleCloudPricingCalculatorPage selectCommittedUsageTime(String committedUsage) {
         committedUsageDropdown.click();
-        selectDropdownOption(committedUsage);
+        ActionUtils.selectDropdownOption(DEFAULT_DROPDOWN_OPTION_XPATH, committedUsage, driverWait());
         return this;
     }
 
-    private void selectDropdownOption(String option) {
-        WebElement dropdownOption =
-                WAIT.until(ExpectedConditions.presenceOfElementLocated(By.xpath(String.format(DEFAULT_DROPDOWN_OPTION_LOCATOR,
-                        option))));
-        dropdownOption.click();
-        WAIT.until(ExpectedConditions.invisibilityOf(dropdownOption));
+    @Override
+    public GoogleCloudPricingCalculatorPage openPage() {
+        driver.navigate().to(BASE_URL);
+        return this;
     }
 }
