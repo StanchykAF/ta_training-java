@@ -3,8 +3,8 @@ package com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.model;
 import lombok.Data;
 
 @Data
-public class ComputeEngineInstancesForm {
-
+public class GoogleCloudMainForm {
+    private String productName;
     private String numberOfInstances;
     private String operationSystem;
     private String VMClass;

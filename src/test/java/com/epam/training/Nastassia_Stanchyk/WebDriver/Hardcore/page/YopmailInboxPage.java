@@ -19,7 +19,7 @@ public class YopmailInboxPage extends AbstractPage {
         throw new RuntimeException("You should authorised first");
     }
 
-    public String checkTotalMonthlyPrice() {
+    public String getTotalMonthlyPrice() {
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {

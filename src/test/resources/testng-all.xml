@@ -1,7 +1,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
-<suite name="All Hardcore tests" verbose="1" >
-    <test name="Total monthly price test"   >
+<suite name="All tests" verbose="1" >
+    <test name="All tests"   >
         <packages>
             <package name="com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.test" />
         </packages>

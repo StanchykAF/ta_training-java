@@ -2,69 +2,61 @@ package com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.test;
 
 import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.driver.DriverSingletone;
 import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.model.CalculatedForm;
-import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.model.ComputeEngineInstancesForm;
+import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.model.GoogleCloudMainForm;
 import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.model.EmailEstimateForm;
 import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.page.GoogleCloudHomePage;
 import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.page.GoogleCloudPricingCalculatorPage;
 import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.page.YopmailEmailGeneratorPage;
 import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.page.YopmailHomePage;
-import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.service.ComputeEngineInstancesFormCompleting;
+import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.service.GoogleCloudMainFormCompleting;
 import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.service.CreateCalculatedForm;
 import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.service.EmailEstimateFormCompleting;
 import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.util.TestListener;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WindowType;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Listeners;
+import org.testng.annotations.*;
 
 @Listeners({TestListener.class})
 public class CommonConditions {
 
     protected WebDriver driver;
-    protected String totalMonthlyPriceFromEmail;
     protected CalculatedForm calculatedForm;
     protected EmailEstimateForm emailEstimateForm;
+    protected GoogleCloudMainForm googleCloudMainForm = GoogleCloudMainFormCompleting.completeForm();
+    protected String searchTerm = "Google Cloud Platform Pricing Calculator";
 
-    @BeforeTest()
+    protected final Logger logger = LogManager.getRootLogger();
+
+    @BeforeMethod()
     public void browserSetup() {
         driver = DriverSingletone.getDriver();
     }
 
-    public void createCalculatedForm() {
-        String searchTerm = "Google Cloud Platform Pricing Calculator";
-        String googleCloudCalculatorWindow;
-        String YopmailPageWindow;
-        ComputeEngineInstancesForm computeEngineInstancesForm = ComputeEngineInstancesFormCompleting.completeForm();
-        GoogleCloudPricingCalculatorPage actualPricingResults = new GoogleCloudHomePage(driver)
+    protected GoogleCloudPricingCalculatorPage getCalculatedMainFormInfo() {
+        GoogleCloudPricingCalculatorPage mainFormPricingResults = new GoogleCloudHomePage(driver)
                 .openPage()
                 .searchForTerms(searchTerm)
                 .openGoogleCloudPricingCalculatorPage()
-                .calculatePrice(computeEngineInstancesForm);
+                .addToEstimateMainForm(googleCloudMainForm);
+        calculatedForm = CreateCalculatedForm.completeCalculatedForm(mainFormPricingResults.getCalculatedForm(),
+                mainFormPricingResults.getTotalMonthlyPrice());
+        return mainFormPricingResults;
+    }
 
-        calculatedForm = CreateCalculatedForm.completeCalculatedForm(actualPricingResults.getCalculatedForm(),
-                actualPricingResults.getTotalMonthlyPrice());
-
-        googleCloudCalculatorWindow = driver.getWindowHandle();
-        driver.switchTo().newWindow(WindowType.TAB);
+    protected YopmailEmailGeneratorPage getEmailAddress() {
         YopmailEmailGeneratorPage actualEmailResult = new YopmailHomePage(driver)
                 .openPage()
                 .generateEmailAddress()
                 .copyEmailAddress();
         emailEstimateForm = EmailEstimateFormCompleting.completeEmailEstimateForm(actualEmailResult.getCopiedEmailAddress());
-        YopmailPageWindow = driver.getWindowHandle();
-        driver.switchTo().window(googleCloudCalculatorWindow);
-        actualPricingResults
-                .pressTheEMAILButton()
-                .sendEstimatedFormToEmail(emailEstimateForm.getEmailAddress());
-        driver.switchTo().window(YopmailPageWindow);
-        totalMonthlyPriceFromEmail = actualEmailResult
-                .checkInboxMail()
-                .checkTotalMonthlyPrice();
+        logger.info("Copied Email: " + emailEstimateForm.getEmailAddress());
+        return actualEmailResult;
     }
 
-    @AfterTest(alwaysRun = true)
+    @AfterMethod(alwaysRun = true)
     public void browserTearDown() {
+        logger.info("Closing browser");
         DriverSingletone.closeDriver();
     }
 }
