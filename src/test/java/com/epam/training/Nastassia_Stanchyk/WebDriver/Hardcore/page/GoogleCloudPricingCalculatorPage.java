@@ -72,29 +72,13 @@ public class GoogleCloudPricingCalculatorPage extends AbstractPage {
         PageFactory.initElements(driver, this);
     }
 
-    public GoogleCloudPricingCalculatorPage addToEstimateMainForm(GoogleCloudMainForm googleCloudMainForm) {
-        switchToFrame(mainFrame)
-                .switchToFrame(innerFrame)
-                .selectProduct(googleCloudMainForm.getProductName())
-                .setNumberOfInstances(googleCloudMainForm.getNumberOfInstances())
-                .selectOperatingSystem(googleCloudMainForm.getOperationSystem())
-                .selectVMClass(googleCloudMainForm.getVMClass())
-                .selectInstanceSeries(googleCloudMainForm.getInstanceSeries())
-                .selectInstanceType(googleCloudMainForm.getInstanceType())
-                .selectAddGPUsCheckBox()
-                .selectGPUType(googleCloudMainForm.getGPUType())
-                .selectNumberOfGPUs(googleCloudMainForm.getNumberOfGPUs())
-                .selectLocalSSD(googleCloudMainForm.getLocalSSD())
-                .selectDatacenterLocation(googleCloudMainForm.getDatacenterLocation())
-                .selectCommittedUsageTime(googleCloudMainForm.getCommittedUsage())
-                .clickAddToEstimateButton();
-        logger.info("Added to estimate");
+    public GoogleCloudPricingCalculatorPage switchToMainFrame () {
+        switchToFrame(mainFrame);
         return this;
     }
 
-    public GoogleCloudPricingCalculatorPage switchToFrame (By frame) {
-        driver.switchTo().frame(driverWait()
-                .until(ExpectedConditions.presenceOfElementLocated(frame)));
+    public GoogleCloudPricingCalculatorPage switchToInnerFrame () {
+        switchToFrame(innerFrame);
         return this;
     }
 
@@ -121,8 +105,8 @@ public class GoogleCloudPricingCalculatorPage extends AbstractPage {
     }
 
     public GoogleCloudPricingCalculatorPage clickTheEMAILButton() {
-        switchToFrame(mainFrame)
-                .switchToFrame(innerFrame);
+        switchToMainFrame()
+                .switchToInnerFrame();
         driver.findElement(emailButton).click();
         return this;
     }

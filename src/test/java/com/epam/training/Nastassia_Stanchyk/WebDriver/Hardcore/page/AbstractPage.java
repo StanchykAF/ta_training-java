@@ -1,6 +1,8 @@
 package com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.page;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -18,5 +20,10 @@ public abstract class AbstractPage {
 
     protected WebDriverWait driverWait() {
         return new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS));
+    }
+
+    public void switchToFrame (By frame) {
+        driver.switchTo().frame(driverWait()
+                .until(ExpectedConditions.presenceOfElementLocated(frame)));
     }
 }

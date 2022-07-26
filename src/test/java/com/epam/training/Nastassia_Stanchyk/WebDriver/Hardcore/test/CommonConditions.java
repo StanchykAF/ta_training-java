@@ -11,6 +11,7 @@ import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.page.YopmailHomeP
 import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.service.GoogleCloudMainFormCompleting;
 import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.service.CreateCalculatedForm;
 import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.service.EmailEstimateFormCompleting;
+import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.steps.CommonSteps;
 import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.util.TestListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,11 +35,12 @@ public class CommonConditions {
     }
 
     protected GoogleCloudPricingCalculatorPage getCalculatedMainFormInfo() {
+        CommonSteps commonSteps = new CommonSteps();
         GoogleCloudPricingCalculatorPage mainFormPricingResults = new GoogleCloudHomePage(driver)
                 .openPage()
                 .searchForTerms(searchTerm)
-                .openGoogleCloudPricingCalculatorPage()
-                .addToEstimateMainForm(googleCloudMainForm);
+                .openGoogleCloudPricingCalculatorPage();
+                commonSteps.addToEstimateMainForm(googleCloudMainForm);
         calculatedForm = CreateCalculatedForm.completeCalculatedForm(mainFormPricingResults.getCalculatedForm(),
                 mainFormPricingResults.getTotalMonthlyPrice());
         return mainFormPricingResults;
