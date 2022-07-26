@@ -17,19 +17,6 @@ public class CreateCalculatedForm {
         form.setProvisioningModel(StringUtils.searchInListByTerm(calculatedFormData, "Provisioning model"));
         form.setEstimatedComponentCostPerMonth(StringUtils.searchInListByTerm(calculatedFormData, "Estimated Component Cost"));
         form.setTotalEstimatedCostPerMonth(totalMonthlyPrice);
-//            TODO: delete sout. I want to send only the data in form
-//        for (String str : calculatedFormData) {
-//            System.out.println(str);
-//        }
-//        System.out.println(form.getRegion());
-//        System.out.println(form.getCommitmentTerm());
-//        System.out.println(form.getProvisioningModel());
-//        System.out.println(form.getInstanceType());
-//        System.out.println(form.getOperationSystem());
-//        System.out.println(form.getLocalSSD());
-//        System.out.println(form.getEstimatedComponentCostPerMonth());
-//        System.out.println(form.getTotalEstimatedCostPerMonth());
-
         return form;
     }
 }
