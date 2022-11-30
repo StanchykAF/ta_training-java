@@ -1,9 +1,8 @@
-package com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.util;
+package com.epam.training.Nastassia_Stanchyk.framework.util;
 
-import com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.driver.DriverSingletone;
+import com.epam.training.Nastassia_Stanchyk.framework.driver.DriverSingletone;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.testng.ITestContext;
@@ -15,8 +14,8 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+@Log4j2
 public class TestListener implements ITestListener {
-    private Logger logger = LogManager.getRootLogger();
 
     public void onTestStart(ITestResult iTestResult) {
 
@@ -47,7 +46,7 @@ public class TestListener implements ITestListener {
     }
 
     private void saveScreenshot(){
-        File screenCapture = ((TakesScreenshot)DriverSingletone
+        File screenCapture = ((TakesScreenshot) DriverSingletone
                 .getDriver())
                 .getScreenshotAs(OutputType.FILE);
         try {
@@ -56,7 +55,7 @@ public class TestListener implements ITestListener {
                             + getCurrentTimeAsString() +
                             ".png"));
         } catch (IOException e) {
-            logger.error("Failed to save screenshot: " + e.getLocalizedMessage());
+            log.error("Failed to save screenshot: " + e.getLocalizedMessage());
         }
     }
 

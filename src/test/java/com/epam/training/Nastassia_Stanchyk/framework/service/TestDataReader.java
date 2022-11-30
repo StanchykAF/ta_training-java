@@ -1,4 +1,4 @@
-package com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.service;
+package com.epam.training.Nastassia_Stanchyk.framework.service;
 
 import java.util.ResourceBundle;
 

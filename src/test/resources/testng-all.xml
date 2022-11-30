@@ -3,7 +3,7 @@
 <suite name="All tests" verbose="1" >
     <test name="All tests"   >
         <packages>
-            <package name="com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.test" />
+            <package name="com.epam.training.Nastassia_Stanchyk.framework.test" />
         </packages>
     </test>
 </suite>

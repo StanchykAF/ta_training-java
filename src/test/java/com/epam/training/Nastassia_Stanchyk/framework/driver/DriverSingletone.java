@@ -1,9 +1,9 @@
-package com.epam.training.Nastassia_Stanchyk.WebDriver.Hardcore.driver;
+package com.epam.training.Nastassia_Stanchyk.framework.driver;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class DriverSingletone {
 
@@ -15,9 +15,9 @@ public class DriverSingletone {
     public static WebDriver getDriver() {
         if (driver == null) {
             switch (System.getProperty("browser")) {
-                case "safari": {
-                    WebDriverManager.safaridriver().setup();
-                    driver = new SafariDriver();
+                case "firefox": {
+                    WebDriverManager.firefoxdriver().setup();
+                    driver = new FirefoxDriver();
                 }
                 default: {
                     WebDriverManager.chromedriver().setup();
