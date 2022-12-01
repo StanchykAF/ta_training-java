@@ -14,7 +14,7 @@ import org.testng.annotations.Listeners;
 
 @Log4j2
 @Listeners({TestListener.class})
-public class AbstractBaseTest {
+public abstract class AbstractBaseTest {
 
     protected WebDriver driver;
     protected CalculatedForm calculatedForm;
